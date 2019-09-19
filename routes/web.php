@@ -14,3 +14,14 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group([
+    'namespace' => 'Auth',
+], function () {
+    Route::group([
+        'prefix' => 'email',
+    ], function () {
+        Route::get('verify/{id}', 'VerificationController@verify')->name('verification.verify');
+        Route::get('resend', 'VerificationController@resend')->name('verification.resend');
+    });
+});
