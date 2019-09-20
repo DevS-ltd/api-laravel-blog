@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -21,19 +22,94 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Handle a login request to the application.
      *
-     * @var string
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected $redirectTo = '/home';
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if ($token = $this->attemptLogin($request)) {
+            return $this->sendLoginResponse($request, $token);
+        }
+
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
 
     /**
-     * Create a new controller instance.
+     * Attempt to log the user into the application.
      *
-     * @return void
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
      */
-    public function __construct()
+    protected function attemptLogin(Request $request)
     {
-        $this->middleware('guest')->except('logout');
+        return $this->guard()->attempt($this->credentials($request));
+    }
+
+    /**
+     * Send the response after the user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $token
+     * @return \Illuminate\Http\Response
+     */
+    protected function sendLoginResponse(Request $request, $token)
+    {
+        $this->clearLoginAttempts($request);
+
+        return $this->response($token);
+    }
+
+    /**
+     * Refresh an auth token.
+     *
+     * @param string $token
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    protected function response($token)
+    {
+        return response([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+        ]);
+    }
+
+    /**
+     * Handle a logout request from the application.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function logout()
+    {
+        auth()->logout();
+
+        return response([
+            'message' => trans('auth.logout'),
+        ]);
+    }
+
+    /**
+     * Refresh an auth token.
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function refresh()
+    {
+        return $this->response(auth()->refresh());
     }
 }
