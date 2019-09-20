@@ -79,12 +79,16 @@ class LoginController extends Controller
     }
 
     /**
-     * Create a new controller instance.
+     * Handle a logout request from the application.
      *
-     * @return void
+     * @return \Illuminate\Http\Response
      */
-    public function __construct()
+    public function logout()
     {
-        $this->middleware('guest')->except('logout');
+        auth()->logout();
+
+        return response([
+            'message' => trans('auth.logout'),
+        ]);
     }
 }

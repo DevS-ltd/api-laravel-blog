@@ -25,4 +25,6 @@ return [
         'success' => 'Verification completed successfully.',
         'verified' => 'Email is already verified.',
     ],
+
+    'logout' => 'Successfully logged out',
 ];

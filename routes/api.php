@@ -20,18 +20,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group([
     'namespace' => 'Auth',
 ], function () {
-    Route::post('login', 'LoginController@login');
+    Route::post('login', 'LoginController@login')->middleware('guest');
     Route::post('register', 'RegisterController@register');
-
-    Route::group([
-        'prefix' => 'email',
-    ], function () {
-        Route::get('resend', 'VerificationController@resend')->name('verification.resend')->middleware('auth');
-    });
 
     Route::group([
         'prefix' => 'password',
     ], function () {
         Route::post('email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    });
+
+    Route::group([
+        'middleware' => 'auth',
+    ], function () {
+        Route::post('logout', 'LoginController@logout');
+
+        Route::group([
+            'prefix' => 'email',
+        ], function () {
+            Route::get('resend', 'VerificationController@resend')->name('verification.resend');
+        });
     });
 });
