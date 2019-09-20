@@ -8,12 +8,13 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use App\Http\Requests\Post\PostIndexRequest;
 use App\Http\Requests\Post\PostCreateRequest;
+use App\Http\Requests\Post\PostUpdateRequest;
 
 class PostController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only(['store']);
+        $this->middleware('auth')->except(['index', 'show']);
         $this->middleware('verified')->only(['store']);
     }
 
@@ -52,5 +53,12 @@ class PostController extends Controller
     public function show(Post $post)
     {
         return new PostResource($post->load('author'));
+    }
+
+    public function update(PostUpdateRequest $request, Post $post)
+    {
+        $post->update($request->validated());
+
+        return new PostResource($post);
     }
 }
