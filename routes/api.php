@@ -24,6 +24,12 @@ Route::group([
     Route::post('register', 'RegisterController@register');
 
     Route::group([
+        'prefix' => 'email',
+    ], function () {
+        Route::get('resend', 'VerificationController@resend')->name('verification.resend')->middleware('auth');
+    });
+
+    Route::group([
         'prefix' => 'password',
     ], function () {
         Route::post('email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');

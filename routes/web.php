@@ -21,8 +21,7 @@ Route::group([
     Route::group([
         'prefix' => 'email',
     ], function () {
-        Route::get('verify/{id}', 'VerificationController@verify')->name('verification.verify');
-        Route::get('resend', 'VerificationController@resend')->name('verification.resend');
+        Route::get('verify/{id}', 'VerificationController@verify')->name('verification.verify')->middleware('signed');
     });
 
     Route::group([
