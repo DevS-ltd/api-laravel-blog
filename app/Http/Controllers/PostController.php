@@ -7,9 +7,16 @@ use App\Http\Resources\PostResource;
 use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use App\Http\Requests\Post\PostIndexRequest;
+use App\Http\Requests\Post\PostCreateRequest;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['store']);
+        $this->middleware('verified')->only(['store']);
+    }
+
     public function index(PostIndexRequest $request)
     {
         $posts = QueryBuilder::for(Post::class)
@@ -26,5 +33,19 @@ class PostController extends Controller
         $posts->appends($request->validated())->links();
 
         return PostResource::collection($posts);
+    }
+
+    public function store(PostCreateRequest $request)
+    {
+        return new PostResource(
+            Post::create(
+                array_merge(
+                    $request->validated(),
+                    [
+                        'user_id' => auth()->id(),
+                    ]
+                )
+            )
+        );
     }
 }
