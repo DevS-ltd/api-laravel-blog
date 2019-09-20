@@ -5,6 +5,7 @@ namespace App\Models;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\PasswordResetNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements MustVerifyEmail, JWTSubject
@@ -58,5 +59,15 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return [
             'email' => $this->email,
         ];
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @return void
+     */
+    public function sendPasswordResetedNotification()
+    {
+        $this->notify(new PasswordResetNotification);
     }
 }

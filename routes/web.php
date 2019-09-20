@@ -24,4 +24,13 @@ Route::group([
         Route::get('verify/{id}', 'VerificationController@verify')->name('verification.verify');
         Route::get('resend', 'VerificationController@resend')->name('verification.resend');
     });
+
+    Route::group([
+        'prefix' => 'password',
+    ], function () {
+        Route::get('reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+        Route::post('reset', 'ResetPasswordController@reset')->name('password.update');
+    });
 });
+
+Route::get('/success', 'SuccessController')->name('success');

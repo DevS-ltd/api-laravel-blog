@@ -22,4 +22,10 @@ Route::group([
 ], function () {
     Route::post('login', 'LoginController@login');
     Route::post('register', 'RegisterController@register');
+
+    Route::group([
+        'prefix' => 'password',
+    ], function () {
+        Route::post('email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+    });
 });
