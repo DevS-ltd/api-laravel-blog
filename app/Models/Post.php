@@ -20,4 +20,11 @@ class Post extends Model
         'annotation',
         'content',
     ];
+
+    /**
+     * The relations to eager load on every query.
+     *
+     * @var array
+     */
+    protected $with = ['photos'];
 }
