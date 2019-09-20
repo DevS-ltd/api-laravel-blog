@@ -18,6 +18,8 @@ class PostIndexRequest extends Request
             'per_page' => 'numeric',
             'filter' => 'array',
             'filter.*' => 'string',
+            'sort' => 'string',
+            'include' => 'string',
         ];
     }
 }
