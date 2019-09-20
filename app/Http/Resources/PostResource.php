@@ -23,6 +23,7 @@ class PostResource extends Resource
             $this->mergeWhen(! $this->resource->relationLoaded('author'), [
                 'author_id' => $this->user_id,
             ]),
+            'photos' => PhotoResource::collection($this->photos),
             'created_at' => $this->created_at,
         ];
     }
