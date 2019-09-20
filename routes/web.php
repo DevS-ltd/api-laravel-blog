@@ -14,3 +14,18 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group([
+    'namespace' => 'Auth',
+], function () {
+    Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify')->middleware('signed');
+
+    Route::prefix('password/reset')
+        ->name('password.')
+        ->group(function () {
+            Route::get('{token}', 'ResetPasswordController@showResetForm')->name('reset');
+            Route::post('/', 'ResetPasswordController@reset')->name('update');
+        });
+});
+
+Route::get('/success', 'SuccessController')->name('success');
