@@ -9,6 +9,7 @@ use Spatie\QueryBuilder\AllowedFilter;
 use App\Http\Requests\Post\PostIndexRequest;
 use App\Http\Requests\Post\PostCreateRequest;
 use App\Http\Requests\Post\PostUpdateRequest;
+use App\Http\Requests\Post\PostDestroyRequest;
 
 class PostController extends Controller
 {
@@ -60,5 +61,14 @@ class PostController extends Controller
         $post->update($request->validated());
 
         return new PostResource($post);
+    }
+
+    public function destroy(PostDestroyRequest $request, Post $post)
+    {
+        $post->delete();
+
+        return response([
+            'message' => trans('messages.delete.success'),
+        ]);
     }
 }
