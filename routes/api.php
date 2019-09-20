@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,3 +29,5 @@ Route::group([
         Route::get('email/resend', 'VerificationController@resend')->name('verification.resend');
     });
 });
+
+Route::apiResource('posts', 'PostController');
