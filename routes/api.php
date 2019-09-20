@@ -33,6 +33,7 @@ Route::group([
         'middleware' => 'auth',
     ], function () {
         Route::post('logout', 'LoginController@logout');
+        Route::post('refresh', 'LoginController@refresh');
 
         Route::group([
             'prefix' => 'email',

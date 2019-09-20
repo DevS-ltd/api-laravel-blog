@@ -71,7 +71,18 @@ class LoginController extends Controller
     {
         $this->clearLoginAttempts($request);
 
-        return response()->json([
+        return $this->response($token);
+    }
+
+    /**
+     * Refresh an auth token.
+     *
+     * @param string $token
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    protected function response($token)
+    {
+        return response([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
@@ -90,5 +101,15 @@ class LoginController extends Controller
         return response([
             'message' => trans('auth.logout'),
         ]);
+    }
+
+    /**
+     * Refresh an auth token.
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function refresh()
+    {
+        return $this->response(auth()->refresh());
     }
 }
