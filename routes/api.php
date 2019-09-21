@@ -37,4 +37,5 @@ Route::prefix('profile')->group(function () {
     Route::post('/', 'ProfileController@updateProfile');
     Route::post('password', 'ProfileController@updatePassword');
     Route::post('avatar', 'ProfileController@uploadAvatar');
+    Route::delete('avatar', 'ProfileController@deleteAvatar');
 });

@@ -12,28 +12,30 @@ class ProfileController extends Controller
 {
     use FileUpload;
 
+    protected $user;
+
     public function __construct()
     {
         $this->middleware('auth');
+        $this->directory = 'avatars';
+        $this->user = auth()->user();
     }
 
     public function getProfile()
     {
-        return new UserResource(auth()->user());
+        return new UserResource($this->user);
     }
 
     public function updateProfile(UpdateProfileRequest $request)
     {
-        $user = auth()->user();
+        $this->user->update($request->validated());
 
-        $user->update($request->validated());
-
-        return new UserResource($user);
+        return new UserResource($this->user);
     }
 
     public function updatePassword(UpdatePasswordRequest $request)
     {
-        auth()->user()->update([
+        $this->user->update([
             'password' => $request->get('password'),
         ]);
 
@@ -44,18 +46,25 @@ class ProfileController extends Controller
 
     public function uploadAvatar(UploadAvatarRequest $request)
     {
-        $this->directory = 'avatars';
-
-        $user = auth()->user();
-
-        if ($user->avatar) {
-            $this->handleDeletedImage($user->avatar);
+        if ($this->user->avatar) {
+            $this->handleDeletedImage($this->user->avatar);
         }
 
-        $user->update([
+        $this->user->update([
             'avatar' => $this->handleUploadedImage($request->file('avatar')),
         ]);
 
-        return new UserResource($user);
+        return new UserResource($this->user);
+    }
+
+    public function deleteAvatar()
+    {
+        $this->handleDeletedImage($this->user->avatar);
+
+        $this->user->update([
+            'avatar' => null,
+        ]);
+
+        return new UserResource($this->user);
     }
 }
