@@ -32,3 +32,4 @@ Route::group([
 
 Route::apiResource('posts', 'PostController');
 Route::apiResource('posts/{post}/photos', 'PhotoController')->only(['store', 'destroy']);
+Route::resource('profile', 'ProfileController')->only(['index', 'store']);
