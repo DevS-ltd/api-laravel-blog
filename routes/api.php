@@ -32,3 +32,10 @@ Route::group([
 
 Route::apiResource('posts', 'PostController');
 Route::apiResource('posts/{post}/photos', 'PhotoController')->only(['store', 'destroy']);
+Route::prefix('profile')->group(function () {
+    Route::get('/', 'ProfileController@getProfile');
+    Route::post('/', 'ProfileController@updateProfile');
+    Route::post('password', 'ProfileController@updatePassword');
+    Route::post('avatar', 'ProfileController@uploadAvatar');
+    Route::delete('avatar', 'ProfileController@deleteAvatar');
+});

@@ -20,7 +20,7 @@ trait FileUpload
      *
      * @var null
      */
-    protected $name = null;
+    protected $fileName = null;
 
     /**
      * Storage instance.
@@ -61,7 +61,7 @@ trait FileUpload
 
             $this->upload($file);
 
-            return "{$this->getDirectory()}/$this->name";
+            return "{$this->getDirectory()}/$this->fileName";
         }
     }
 
@@ -76,7 +76,7 @@ trait FileUpload
     {
         $this->renameIfExists($file);
 
-        return $this->storage->putFileAs($this->getDirectory(), $file, $this->name);
+        return $this->storage->putFileAs($this->getDirectory(), $file, $this->fileName);
     }
 
     /**
@@ -90,8 +90,8 @@ trait FileUpload
     {
         $this->name($file->getClientOriginalName());
 
-        if ($this->checkFileExists($this->name)) {
-            $this->name = $this->generateUniqueName($file);
+        if ($this->checkFileExists($this->fileName)) {
+            $this->fileName = $this->generateUniqueName($file);
         }
     }
 
@@ -164,7 +164,7 @@ trait FileUpload
     public function name(string $name)
     {
         if ($name) {
-            $this->name = $name;
+            $this->fileName = $name;
         }
 
         return $this;
