@@ -36,4 +36,5 @@ Route::prefix('profile')->group(function () {
     Route::get('/', 'ProfileController@getProfile');
     Route::post('/', 'ProfileController@updateProfile');
     Route::post('password', 'ProfileController@updatePassword');
+    Route::post('avatar', 'ProfileController@uploadAvatar');
 });
