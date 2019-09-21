@@ -35,4 +35,5 @@ Route::apiResource('posts/{post}/photos', 'PhotoController')->only(['store', 'de
 Route::prefix('profile')->group(function () {
     Route::get('/', 'ProfileController@getProfile');
     Route::post('/', 'ProfileController@updateProfile');
+    Route::post('password', 'ProfileController@updatePassword');
 });

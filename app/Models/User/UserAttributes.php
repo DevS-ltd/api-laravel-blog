@@ -12,4 +12,9 @@ trait UserAttributes
         }
         $this->attributes['email'] = $value;
     }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 }

@@ -19,5 +19,6 @@ return [
     'token' => 'This password reset token is invalid.',
     'user' => "We can't find a user with that e-mail address.",
     'error' => 'The given data was invalid.',
+    'updated' => 'Your password has been update.',
 
 ];
