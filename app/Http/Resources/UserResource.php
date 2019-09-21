@@ -20,9 +20,13 @@ class UserResource extends Resource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->when(auth()->id() === $this->id, $this->email),
+            $this->mergeWhen(auth()->id() === $this->id, [
+                'email' => $this->email,
+                'is_verified' => boolval($this->email_verified_at),
+            ]),
             'avatar' => $this->when($this->avatar, function () {
                 $this->initStorage();
+
                 return $this->storage->url($this->avatar);
             }),
         ];
